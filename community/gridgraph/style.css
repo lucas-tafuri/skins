@@ -1,0 +1,683 @@
+:root {
+  /* Main color scheme */
+  --color-primary: rgb(139, 192, 55);      /* Primary green color */
+  --color-primary-dim: rgba(126, 133, 55, 0.3);
+  --color-primary-bright: rgba(126, 133, 55, 0.8);
+  
+  /* Text and backgrounds */
+  --color-background: #000000;     /* Main background color */
+  --color-text: #ffffff;           /* Main text color */
+  --color-sidebar-bg: rgba(0, 10, 5, 0.8); /* Sidebar background */
+  
+  /* Displays and indicators */
+  --color-display: #ff6600;        /* Color for RPM and speed display */
+  --color-display-bg: rgb(80, 25, 0);  /* Background for display boxes */
+  --color-display-dim: rgba(40, 10, 0, 0.4);  /* Background for 7-segment displays */
+  
+  /* Indicator colors */
+  --color-indicator: #ff9900;     
+  --color-indicator-glow: rgba(255, 153, 0, 0.4);
+  --color-dot: #9eff65;            /* Position indicator dot */
+  --color-dot-glow: rgba(219, 255, 189, 0.884);  /* Position indicator glow */
+  
+  /* Light indicators */
+  --color-high-beam: rgba(0, 0, 128, 0.4);  /* High beam light */
+  --color-high-beam-dim: rgba(0, 0, 64, 0.4);
+  --color-low-beam: rgba(0, 128, 0, 0.4);   /* Low beam light */
+  --color-low-beam-dim: rgba(0, 64, 0, 0.4);
+  --color-fog-light: rgba(50, 205, 50, 0.4);  /* Fog light */
+  --color-fog-light-dim: rgba(25, 102, 25, 0.4);
+  /* New hazard light colors */
+  --color-hazard: rgba(255, 140, 0, 0.4);   /* Hazard light - orange */
+  --color-hazard-dim: rgba(128, 70, 0, 0.4);
+  
+  /* Grid numbers when passed */
+  --color-passed: rgb(219, 229, 119);
+  --color-passed-glow: rgba(180, 190, 80, 0.7);
+  --color-passed-bright: rgb(248, 255, 172);
+  --color-passed-bright-glow: rgba(220, 230, 120, 0.9);
+  
+  /* Global glow effect */
+  --global-glow: 0 0 15px rgba(255, 255, 255, 0.5);
+  
+  /* Layout variables */
+  --sidebar-width: 10%;
+  
+  /* New gauge colors */
+  --color-water-temp: #3498db;
+  --color-oil-temp: #e67e22;
+  --color-oil-press: #27ae60;
+  --color-battery: #f1c40f;
+  --color-boost: #8e44ad;
+  
+  /* Right sidebar width to match left sidebar */
+  --right-sidebar-width: 10%;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Rubik', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Add font-face declaration for DSEG7 Modern Bold */
+@font-face {
+  font-family: 'DSEG7Modern-Bold';
+  src: url('../../assets/fonts/DSEG7-Modern/DSEG7Modern-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+#container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row; /* Changed to row */
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+#container.anim-in {
+  opacity: 1;
+}
+
+/* Main content layout */
+#container {
+  display: flex;
+  flex-direction: row; /* Changed to row */
+}
+
+/* Create a horizontal layout for sidebar and main content */
+#container > div:not(#bottom-odo) {
+  display: flex;
+  flex: 1;
+}
+
+/* Left sidebar */
+#left-sidebar {
+  width: var(--sidebar-width);
+  max-width: 10%;  /* Added: ensure sidebar never exceeds 10% */
+  background-color: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-primary-dim);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+}
+
+/* Right sidebar styles */
+#right-sidebar {
+  width: var(--right-sidebar-width);
+  max-width: 10%;
+  background-color: var(--color-sidebar-bg);
+  border-left: 1px solid var(--color-primary-dim);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  gap: 20px; /* Space between gauges */
+}
+
+/* Gauge container */
+.gauge-container {
+  width: 90%;
+  margin: 5px 0;
+}
+
+/* Gauge label */
+.gauge-label {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: var(--color-text);
+}
+
+/* Gauge styling */
+.gauge {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  padding: 8px;
+  position: relative;
+}
+
+.gauge-value {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+  color: var(--color-text);
+}
+
+.gauge-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  width: 65%; /* Default value */
+  transition: width 0.5s ease;
+}
+
+/* Custom colors for each gauge */
+#water-temp-fill {
+  background-color: var(--color-water-temp);
+  box-shadow: 0 0 10px var(--color-water-temp);
+}
+
+#oil-temp-fill {
+  background-color: var(--color-oil-temp);
+  box-shadow: 0 0 10px var(--color-oil-temp);
+}
+
+#oil-press-fill {
+  background-color: var(--color-oil-press);
+  box-shadow: 0 0 10px var(--color-oil-press);
+}
+
+#battery-fill {
+  background-color: var(--color-battery);
+  box-shadow: 0 0 10px var(--color-battery);
+}
+
+#boost-fill {
+  background-color: var(--color-boost);
+  box-shadow: 0 0 10px var(--color-boost);
+}
+
+/* Main content area */
+#main-content {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Digital displays */
+.digital-display {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--color-primary-dim);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  position: relative; /* Add relative positioning */
+}
+
+#rpm-digital {
+  background-color: var(--color-display-bg); /* More opaque background */
+  border: none; /* Remove border/outline */
+  width: 80%; /* Adjusted width for 2:1 ratio */
+  height: 10%;
+}
+
+#rpm-digital .label {
+  position: absolute;
+  top: 100%; /* Position below the box */
+  right: 0; /* Align to the right corner */
+  left: auto;
+  bottom: auto;
+  font-size: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+  color: var(--color-primary); /* Light color for label */
+  text-align: right; /* Ensure text is right-aligned */
+}
+
+.digital-display .label {
+  font-size: 25px;
+  text-transform: uppercase;
+  text-transform: bold;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.digital-display .value {
+  font-family: 'DSEG7Modern-Bold', monospace;
+  font-weight: bold;
+  position: relative;
+  z-index: 2; /* Ensure value appears on top of background */
+  font-size: 100%; /* Scale font size to fit box */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#rpm-digital .value {
+  color: var(--color-display); /* Already orange */
+  position: relative;
+  z-index: 2; /* Ensure value appears on top of background */
+  font-size: 8vh; /* Scale font size to fit box */
+}
+
+#rpm-digital .value-background {
+  font-size: 8vh;
+  font-weight: bold;
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%) translateY(-50%); /* Adjust for exact alignment */
+  font-family: 'DSEG7Modern-Bold', monospace;
+  color: var(--color-display-dim); /* Dark orange for background segments */
+  z-index: 1;
+}
+
+/* Light indicators */
+.light-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Reduced default gap between items */
+  margin-top: 50px; /* More space from RPM indicator */
+  width: 100%;
+  height: calc(100% - 150px); /* Use remaining space minus RPM display and margins */
+  justify-content: center; /* Center content vertically */
+}
+
+/* Top three indicators grouped together */
+.light-icon:nth-child(1),
+.light-icon:nth-child(2),
+.light-icon:nth-child(3) {
+  margin-bottom: 10px; /* Increased gap between the top three */
+}
+
+/* Group styling - add more space after the group */
+.light-icon:nth-child(3) {
+  margin-bottom: 30px; /* More space after the group */
+}
+
+/* Separate the hazard light */
+.light-icon:nth-child(4) {
+  margin-top: auto; /* Push to bottom of container */
+  margin-bottom: 40px; /* Increased space from the bottom */
+}
+
+.light-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Add this to center contents vertically */
+  opacity: 0.5;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  width: 80%; /* Same width as RPM box */
+  height: 50px; /* Taller light boxes */
+  margin: 0 auto;
+  padding: 15px 10px; /* Increased vertical padding */
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Enhanced glow for active light indicators */
+.light-icon.active {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.light-icon:nth-child(1).active {
+  box-shadow: 0 0 15px rgba(0, 0, 255, 0.6);
+}
+
+.light-icon:nth-child(2).active {
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+}
+
+.light-icon:nth-child(3).active {
+  box-shadow: 0 0 15px rgba(50, 255, 50, 0.6);
+}
+
+/* New hazard light glow */
+.light-icon:nth-child(4).active {
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
+}
+
+.light-icon span {
+  /* Remove box styling */
+  background-color: transparent;
+  border: none;
+  padding: 0; /* Remove padding */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Vertically center the content */
+  width: auto; /* Adjust width */
+  height: auto; /* Adjust height */
+}
+
+.light-icon span img {
+  width: 32px; /* Increased size */
+  height: 32px; /* Increased size */
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2));
+  transition: filter 0.3s ease;
+}
+
+.light-icon.active span img {
+  filter: drop-shadow(0 0 8px currentColor) brightness(1.2);
+}
+
+/* Specific background colors for each light indicator */
+.light-icon:nth-child(1) {
+  background-color: var(--color-high-beam); /* Blue for high beam */
+  border: none;
+}
+
+/* Fix the selector - missing dot before 'light-icon' */
+.light-icon:nth-child(2) {
+  background-color: var(--color-low-beam); /* Green for low beam */
+  border: none;
+}
+
+.light-icon:nth-child(3) {
+  background-color: var(--color-fog-light); /* Lime for fog lights */
+  border: none;
+}
+
+/* New hazard light styles */
+.light-icon:nth-child(4) {
+  background-color: var(--color-hazard); /* Orange for hazard lights */
+  border: none;
+}
+
+/* Darker colors when inactive */
+.light-icon:not(.active):nth-child(1) {
+  background-color: var(--color-high-beam-dim); /* Darker blue */
+}
+
+.light-icon:not(.active):nth-child(2) {
+  background-color: var(--color-low-beam-dim); /* Darker green */
+}
+
+.light-icon:not(.active):nth-child(3) {
+  background-color: var(--color-fog-light-dim); /* Darker lime */
+}
+
+/* New hazard light inactive style */
+.light-icon:not(.active):nth-child(4) {
+  background-color: var(--color-hazard-dim); /* Darker orange */
+}
+
+.light-icon .label {
+  display: none; /* Hide the text labels */
+}
+
+/* Speed display - moved from top right to bottom */
+#speed-display {
+  position: absolute;
+  bottom: 25%; /* Position from bottom instead of top */
+  right: 25%; /* Position from right instead of left */
+  top: auto; /* Remove top positioning */
+  width: 10%; /* Adjusted width for 2:1 ratio */
+  height: 10%; /* Height remains the same */
+  margin: 0;
+  z-index: 10;
+  background-color: var(--color-display-bg); /* More opaque background */
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#speed-display .label {
+  position: absolute;
+  left: -60px;
+  font-size: 14px;
+  text-transform: none;
+  letter-spacing: 1px;
+  margin-bottom: 0;
+  color: var(--color-primary);
+}
+
+#speed-display .value {
+  font-family: 'DSEG7Modern-Bold', monospace;
+  font-size: 8vh; /* Scale font size to fit box */
+  font-weight: bold;
+  color: var(--color-display);
+  /* Center and size properly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+  overflow: hidden; /* Prevent overflow */
+  white-space: nowrap; /* Keep the number in one line */
+}
+
+#speed-display .value-background {
+  font-size: 8vh; /* Scale font size to fit box */
+  font-weight: bold;
+  position: absolute;
+  font-family: 'DSEG7Modern-Bold', monospace;
+  color: var(--color-display-dim);
+  /* Dark orange for background segments */
+  z-index: 1;
+}
+
+/* Graph container */
+#graph-container {
+  position: absolute;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-template-rows: 40px 1fr 40px;
+  margin: 20px;
+}
+
+/* Axes */
+.axis {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+#left-axis {
+  grid-column: 1;
+  grid-row: 2;
+  flex-direction: column;
+  padding-right: 10px;
+}
+
+#top-axis {
+  grid-column: 2;
+  grid-row: 1;
+  padding-bottom: 10px;
+}
+
+#bottom-axis {
+  grid-column: 2;
+  grid-row: 3;
+  padding-top: 10px;
+}
+
+.axis .tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.axis .tick span {
+  color: var(--color-primary);
+  font-size: 16px; /* Increased from 12px */
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+/* Vertical (speed) numbers styling when passed */
+#top-axis .tick span.passed,
+#bottom-axis .tick span.passed {
+  color: var(--color-passed);
+  text-shadow: 0 0 5px var(--color-passed-glow);
+}
+
+/* Horizontal (RPM) numbers styling when passed */
+#left-axis .tick span.passed {
+  color: var(--color-passed);
+  text-shadow: 0 0 5px var(--color-passed-glow);
+}
+
+/* Extra brightness for numbers passed a while ago */
+.axis .tick span.passed-bright {
+  color: var(--color-passed-bright);
+  text-shadow: 0 0 8px var(--color-passed-bright-glow);
+}
+
+#left-axis .tick span {
+  text-align: right;
+  margin-right: 5px;
+}
+
+/* Grid */
+#grid {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  border: 1px solid var(--color-primary);
+  background-color: rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  box-shadow: 0 0 20px var(--color-primary-dim);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.grid-line {
+  position: absolute;
+  background-color: var(--color-primary-dim);
+  z-index: 5;
+}
+
+.grid-line.horizontal {
+  width: 100%;
+  height: 2px; /* Increased thickness */
+}
+
+.grid-line.vertical {
+  height: 100%;
+  width: 2px; /* Increased thickness */
+}
+
+/* Position the horizontal (RPM) lines */
+.grid-line.horizontal[data-rpm="8"] { top: 0%; }
+.grid-line.horizontal[data-rpm="7"] { top: 16.67%; }
+.grid-line.horizontal[data-rpm="6"] { top: 33.33%; }
+.grid-line.horizontal[data-rpm="5"] { top: 50%; }
+.grid-line.horizontal[data-rpm="4"] { top: 66.67%; }
+.grid-line.horizontal[data-rpm="3"] { top: 83.33%; }
+.grid-line.horizontal[data-rpm="2"] { top: 100%; }
+
+/* Position the vertical (speed) lines at 15 km/h increments - fixed calculation */
+.grid-line.vertical[data-speed="0"] { left: 0%; }
+.grid-line.vertical[data-speed="15"] { left: calc(15/300 * 100%); }
+.grid-line.vertical[data-speed="30"] { left: calc(30/300 * 100%); }
+.grid-line.vertical[data-speed="45"] { left: calc(45/300 * 100%); }
+.grid-line.vertical[data-speed="60"] { left: calc(60/300 * 100%); }
+.grid-line.vertical[data-speed="75"] { left: calc(75/300 * 100%); }
+.grid-line.vertical[data-speed="90"] { left: calc(90/300 * 100%); }
+.grid-line.vertical[data-speed="105"] { left: calc(105/300 * 100%); }
+.grid-line.vertical[data-speed="120"] { left: calc(120/300 * 100%); }
+.grid-line.vertical[data-speed="135"] { left: calc(135/300 * 100%); }
+.grid-line.vertical[data-speed="150"] { left: calc(150/300 * 100%); }
+.grid-line.vertical[data-speed="165"] { left: calc(165/300 * 100%); }
+.grid-line.vertical[data-speed="180"] { left: calc(180/300 * 100%); }
+.grid-line.vertical[data-speed="195"] { left: calc(195/300 * 100%); }
+.grid-line.vertical[data-speed="210"] { left: calc(210/300 * 100%); }
+.grid-line.vertical[data-speed="225"] { left: calc(225/300 * 100%); }
+.grid-line.vertical[data-speed="240"] { left: calc(240/300 * 100%); }
+.grid-line.vertical[data-speed="255"] { left: calc(255/300 * 100%); }
+.grid-line.vertical[data-speed="270"] { left: calc(270/300 * 100%); }
+.grid-line.vertical[data-speed="285"] { left: calc(285/300 * 100%); }
+.grid-line.vertical[data-speed="300"] { left: 100%; }
+
+/* Position indicator */
+#position-indicator {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: var(--color-dot); /* Keep the dot green */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px var(--color-dot-glow); /* Keep the green glow */
+  transition: left 0.2s ease, top 0.2s ease, box-shadow 0.2s ease; /* Added transition */
+  left: 0;
+  top: 100%;
+  opacity: 0;
+  z-index: 100; /* Ensure it's on top */
+}
+
+#container.connected #position-indicator {
+  opacity: 1;
+}
+
+/* Add RPM-based glow */
+#position-indicator.rpm-low {
+  box-shadow: 0 0 5px var(--color-primary-bright);
+}
+
+#position-indicator.rpm-medium {
+  box-shadow: 0 0 15px var(--color-primary-bright);
+}
+
+#position-indicator.rpm-high {
+  box-shadow: 0 0 25px var(--color-primary-bright);
+}
+
+/* Bottom odometer */
+#bottom-odo {
+  display: flex;
+  justify-content: left; /* Modified to left */
+  align-items: center;
+  padding: 0 20px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-top: 1px solid var(--color-primary-dim);
+  font-size: 14px;
+  z-index: 10;
+}
+
+#bottom-odo span {
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+/* Animation for connected state */
+@keyframes grid-pulse {
+  0% { box-shadow: 0 0 20px var(--color-primary-dim); }
+  50% { box-shadow: 0 0 30px var(--color-primary-bright); }
+  100% { box-shadow: 0 0 20px var(--color-primary-dim); }
+}
+
+#container.connected #grid {
+  animation: grid-pulse 2s infinite;
+}
+
+/* Helper classes for active states */
+.active {
+  opacity: 1 !important;
+}

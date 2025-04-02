@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Grid Graph Dashboard</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="container">
+    <!-- Left sidebar -->
+    <div id="left-sidebar">
+      <div id="rpm-digital" class="digital-display">
+        <div class="label">RPM</div>
+        <div class="value-background">0000</div>
+        <div class="value" id="rpm">0</div>
+      </div>
+      
+      <div class="light-indicators">
+        <div class="light-icon">
+          <span id="highBeam"><img src="../../assets/icons/hheadlight.svg" alt="High beam" /></span>
+          <div class="label">HIGH</div>
+        </div>
+        <div class="light-icon">
+          <span id="parkLights"><img src="../../assets/icons/headlight.svg" alt="Low beam" /></span>
+          <div class="label">LOW</div>
+        </div>
+        <div class="light-icon">
+          <span id="fogLights"><img src="../../assets/icons/milha.svg" alt="Fog lights" /></span>
+          <div class="label">FOG</div>
+        </div>
+        <!-- Add new hazard light indicator -->
+        <div class="light-icon">
+          <span id="hazardLights"><img src="../../assets/icons/alert.svg" alt="Hazard lights" /></span>
+          <div class="label">HAZARD</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main content area -->
+    <div id="main-content">
+      <!-- Right speed display -->
+      <div id="speed-display" class="digital-display">
+        <div class="label">Km/h</div>
+        <div class="value-background">000</div>
+        <div class="value" id="speedo">0</div>
+      </div>
+      
+      <!-- Main graph container -->
+      <div id="graph-container">
+        <!-- Top speed axis -->
+        <div id="top-axis" class="axis">
+          <div class="tick"><span>0</span></div>
+          <div class="tick"><span>15</span></div>
+          <div class="tick"><span>30</span></div>
+          <div class="tick"><span>45</span></div>
+          <div class="tick"><span>60</span></div>
+          <div class="tick"><span>75</span></div>
+          <div class="tick"><span>90</span></div>
+          <div class="tick"><span>105</span></div>
+          <div class="tick"><span>120</span></div>
+          <div class="tick"><span>135</span></div>
+          <div class="tick"><span>150</span></div>
+          <div class="tick"><span>165</span></div>
+          <div class="tick"><span>180</span></div>
+          <div class="tick"><span>195</span></div>
+          <div class="tick"><span>210</span></div>
+          <div class="tick"><span>225</span></div>
+          <div class="tick"><span>240</span></div>
+          <div class="tick"><span>255</span></div>
+          <div class="tick"><span>270</span></div>
+          <div class="tick"><span>285</span></div>
+          <div class="tick"><span>300</span></div>
+        </div>
+        
+        <!-- Left RPM axis -->
+        <div id="left-axis" class="axis">
+          <div class="tick"><span>8</span></div>
+          <div class="tick"><span>7</span></div>
+          <div class="tick"><span>6</span></div>
+          <div class="tick"><span>5</span></div>
+          <div class="tick"><span>4</span></div>
+          <div class="tick"><span>3</span></div>
+          <div class="tick"><span>2</span></div>
+        </div>
+        
+        <!-- The grid itself -->
+        <div id="grid">
+          <!-- Horizontal grid lines -->
+          <div class="grid-line horizontal" data-rpm="8"></div>
+          <div class="grid-line horizontal" data-rpm="7"></div>
+          <div class="grid-line horizontal" data-rpm="6"></div>
+          <div class="grid-line horizontal" data-rpm="5"></div>
+          <div class="grid-line horizontal" data-rpm="4"></div>
+          <div class="grid-line horizontal" data-rpm="3"></div>
+          <div class="grid-line horizontal" data-rpm="2"></div>
+          
+          <!-- Vertical grid lines -->
+          <div class="grid-line vertical" data-speed="0"></div>
+          <div class="grid-line vertical" data-speed="15"></div>
+          <div class="grid-line vertical" data-speed="30"></div>
+          <div class="grid-line vertical" data-speed="45"></div>
+          <div class="grid-line vertical" data-speed="60"></div>
+          <div class="grid-line vertical" data-speed="75"></div>
+          <div class="grid-line vertical" data-speed="90"></div>
+          <div class="grid-line vertical" data-speed="105"></div>
+          <div class="grid-line vertical" data-speed="120"></div>
+          <div class="grid-line vertical" data-speed="135"></div>
+          <div class="grid-line vertical" data-speed="150"></div>
+          <div class="grid-line vertical" data-speed="165"></div>
+          <div class="grid-line vertical" data-speed="180"></div>
+          <div class="grid-line vertical" data-speed="195"></div>
+          <div class="grid-line vertical" data-speed="210"></div>
+          <div class="grid-line vertical" data-speed="225"></div>
+          <div class="grid-line vertical" data-speed="240"></div>
+          <div class="grid-line vertical" data-speed="255"></div>
+          <div class="grid-line vertical" data-speed="270"></div>
+          <div class="grid-line vertical" data-speed="285"></div>
+          <div class="grid-line vertical" data-speed="300"></div>
+          
+          <!-- Position indicator -->
+          <div id="position-indicator"></div>
+        </div>
+        
+        <!-- Bottom speed axis -->
+        <div id="bottom-axis" class="axis">
+          <div class="tick"><span>0</span></div>
+          <div class="tick"><span>15</span></div>
+          <div class="tick"><span>30</span></div>
+          <div class="tick"><span>45</span></div>
+          <div class="tick"><span>60</span></div>
+          <div class="tick"><span>75</span></div>
+          <div class="tick"><span>90</span></div>
+          <div class="tick"><span>105</span></div>
+          <div class="tick"><span>120</span></div>
+          <div class="tick"><span>135</span></div>
+          <div class="tick"><span>150</span></div>
+          <div class="tick"><span>165</span></div>
+          <div class="tick"><span>180</span></div>
+          <div class="tick"><span>195</span></div>
+          <div class="tick"><span>210</span></div>
+          <div class="tick"><span>225</span></div>
+          <div class="tick"><span>240</span></div>
+          <div class="tick"><span>255</span></div>
+          <div class="tick"><span>270</span></div>
+          <div class="tick"><span>285</span></div>
+          <div class="tick"><span>300</span></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right sidebar for additional gauges -->
+    <div id="right-sidebar">
+      <div class="gauge-container">
+        <div class="gauge-label">WATER TEMP</div>
+        <div class="gauge" id="water-temp-gauge">
+          <div class="gauge-value">90°C</div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="water-temp-fill"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="gauge-container">
+        <div class="gauge-label">OIL TEMP</div>
+        <div class="gauge" id="oil-temp-gauge">
+          <div class="gauge-value">85°C</div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="oil-temp-fill"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="gauge-container">
+        <div class="gauge-label">OIL PRESS</div>
+        <div class="gauge" id="oil-press-gauge">
+          <div class="gauge-value">3.2 BAR</div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="oil-press-fill"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="gauge-container">
+        <div class="gauge-label">BATTERY</div>
+        <div class="gauge" id="battery-gauge">
+          <div class="gauge-value">12.8V</div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="battery-fill"></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="gauge-container">
+        <div class="gauge-label">BOOST</div>
+        <div class="gauge" id="boost-gauge">
+          <div class="gauge-value">1.2 BAR</div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="boost-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../assets/defaultSettings.js" type="text/javascript"></script>
+  <script src="../../assets/client.js" type="text/javascript"></script>
+  <script src="script.js" type="text/javascript"></script>
+</body>
+</html>

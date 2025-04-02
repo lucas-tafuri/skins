@@ -243,7 +243,7 @@ body {
   width: 100%;
   height: 100%;
   background-image: url('./drop.png');
-  background-size: 2300% 100%; /* 23 frames at 100% width each */
+  background-size: 9300% 100%; /* Updated from 2300% to 9300% to account for 93 frames */
   background-repeat: no-repeat;
   background-position: 0% 0; /* Ensure it starts from the first frame */
 }
@@ -629,8 +629,8 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-image: url('../../assets/icons/user.svg');
-  background-size: 60%;
+  background-image: url('profile%20picture.png'); /* Updated to use the profile picture */
+  background-size: cover; /* Changed to cover */
   background-position: center;
   background-repeat: no-repeat;
   background-color: #444;
