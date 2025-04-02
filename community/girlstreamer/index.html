@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Girl Streamer Dashboard</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body>
+    <div id="container">
+      <!-- Left sidebar with vertical icons -->
+      <div id="left-sidebar">
+        <div class="icon-group vertical">
+          <span id="turnLeft"><img src="../../assets/icons/turn-left.svg" alt="turnLeft" /></span>
+          <span id="ECUErr"><img src="../../assets/icons/injection.svg" alt="ECUErr" /></span>
+          <span id="battAlt"><img src="../../assets/icons/battery.svg" alt="battAlt" /></span>
+          <span id="eBrake"><img src="../../assets/icons/handbrake.svg" alt="eBrake" /></span>
+          <span id="oilSwitch"><img src="../../assets/icons/oil.svg" alt="oilSwitch" /></span>
+          <span id="turnRight"><img src="../../assets/icons/turn-right.svg" alt="turnRight" /></span>
+          <span id="highBeam"><img src="../../assets/icons/hheadlight.svg" alt="highBeam" /></span>
+          <span id="parkLights"><img src="../../assets/icons/headlight.svg" alt="parkLights" /></span>
+          <span id="fogLights"><img src="../../assets/icons/milha.svg" alt="fogLights" /></span>
+          <span id="auxLights"><img src="../../assets/icons/neblina.svg" alt="auxLights" /></span>
+          <span id="fan"><img src="../../assets/icons/fan.svg" alt="fan" /></span>
+          <span id="openDoor"><img src="../../assets/icons/door.svg" alt="openDoor" /></span>
+        </div>
+      </div>
+      
+      <!-- Main content area (like Twitch video player) -->
+      <div id="main-content">
+        <!-- Stream title -->
+        <div id="stream-title">
+          <h1>Ghost.tv</h1>
+        </div>
+
+        <!-- RPM-controlled animation (main video area) -->
+        <div id="rpm-animation">
+          <div class="animation-container">
+            <div id="rpm-sprite"></div>
+          </div>
+        </div>
+        
+        <!-- Streamer profile section (like Twitch profile) -->
+        <div id="streamer-profile">
+          <div class="profile-left">
+            <div class="profile-pic-container">
+              <div class="live-badge">LIVE</div>
+              <div class="profile-pic"></div>
+            </div>
+            <div class="streamer-info">
+              <div class="streamer-name">CutieGirl<span class="verified-icon"></span></div>
+              <div class="stream-title">Drifting practice on Ebisu Minami! Testing new tune!</div>
+              <div class="stream-game">Assetto Corsa • Drift</div>
+            </div>
+          </div>
+          <div class="profile-right">
+            <button class="twitch-btn follow-btn">
+              <span class="btn-icon heart-icon"></span>
+              Follow
+            </button>
+            <button class="twitch-btn donate-btn">
+              <span class="btn-icon bit-icon"></span>
+              Donate
+            </button>
+          </div>
+        </div>
+        
+        <!-- Digital speedometer and RPM (like video stats) -->
+        <div id="speed-rpm-display">
+          <div class="digital-metric">
+            <div class="digital-value" id="speedo">0</div>
+            <div class="digital-label">LIVE VIEWERS</div>
+          </div>
+          <div class="digital-metric">
+            <div class="digital-value" id="rpm-container">
+              <span class="currency-symbol">$</span><span id="rpm">0</span>
+            </div>
+            <div class="digital-label">DONATIONS</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar area (like Twitch chat) -->
+      <div id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">STREAM CHAT</div>
+        </div>
+        
+        <!-- Data readouts (like chat messages) -->
+        <div class="data-readouts">
+          <!-- Trip odometer as chat message -->
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge sub">SUB</span>
+              <span class="user-name">TripCounter</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value">
+                <img src="../../assets/icons/odo.svg" alt="trip" class="message-icon" />
+                <span id="kmTrip">0</span><span class="unit">km</span>
+              </div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <!-- Total odometer as chat message -->
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge mod">MOD</span>
+              <span class="user-name">TotalDistance</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value">
+                <img src="../../assets/icons/odo.svg" alt="total" class="message-icon" />
+                <span id="kmTotal">0</span><span class="unit">km</span>
+              </div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <!-- Fuel level as chat message -->
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge vip">VIP</span>
+              <span class="user-name">FuelLevel</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value">
+                <img src="../../assets/icons/fuel.svg" alt="fuel" class="message-icon" />
+                <span id="fuelLevel">0</span><span class="unit">%</span>
+              </div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <!-- Temperature as chat message -->
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge mod">MOD</span>
+              <span class="user-name">TempMonitor</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value">
+                <img src="../../assets/icons/clt.svg" alt="temp" class="message-icon" />
+                <span id="cltNow">0</span><span class="unit">°C</span>
+              </div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge mod">MOD</span>
+              <span class="user-name">BatteryBot</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value"><span id="battLevel">0</span><span class="unit">V</span></div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge vip">VIP</span>
+              <span class="user-name">FuelPressure</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value"><span id="fuelPressure">0</span><span class="unit">BAR</span></div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge sub">SUB</span>
+              <span class="user-name">LambdaSensor</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value"><span id="lambda">0</span></div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge">
+                <img src="../../assets/icons/oil.svg" alt="oil" class="chat-icon" />
+              </span>
+              <span class="user-name">OilPressure</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value"><span id="oilPressure">0</span><span class="unit">BAR</span></div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+          
+          <div class="chat-message">
+            <div class="chat-user">
+              <span class="user-badge">
+                <img src="../../assets/icons/injection.svg" alt="boost" class="chat-icon" />
+              </span>
+              <span class="user-name">BoostGang</span>
+            </div>
+            <div class="message-content">
+              <div class="data-value"><span id="mapBoost">0</span><span class="unit">BAR</span></div>
+            </div>
+            <div class="timestamp">just now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/defaultSettings.js" type="text/javascript"></script>
+    <script src="../../assets/client.js" type="text/javascript"></script>
+    <script src="./script.js" type="text/javascript"></script>
+  </body>
+</html>
