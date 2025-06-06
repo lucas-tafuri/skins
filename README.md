@@ -6,7 +6,7 @@ Welcome to the Ghost Dashboard Skins GitHub repository! This platform is dedicat
 - No other use is allowed without the author's express written permission.
 - No other application will be compatible with the content of this repository.
 <br><br>
-
+##
 ## 🎨 Customization at Your Fingertips
 
 We focus on enabling you to craft custom skins that bring your unique vision to life. With the Ghost Dashboard as your canvas, you can design a personalized interface that reflects your style and enhances your driving experience.
